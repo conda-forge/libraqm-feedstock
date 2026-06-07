@@ -12,7 +12,7 @@ source:
     - patches/0001-undef-NDEBUG-for-tests.patch
 
 build:
-  number: 0
+  number: 1
   script: build
 
 requirements:
@@ -35,12 +35,17 @@ requirements:
     # for running tests, see
     # https://github.com/HOST-Oman/libraqm/blob/v0.10.5/tests/meson.build#L1
     - python *
+  run:
+    # required for pkg-config metadata to work
+    - freetype
+    - if: win
+      then:
+        - glib
+        - zlib
   run_exports:
     - ${{ pin_subpackage("libraqm", upper_bound="x.x") }}
   ignore_run_exports:
     from_package:
-      - glib
-      - zlib
       - python
 
 tests:
@@ -56,6 +61,11 @@ tests:
           then:
             - Library\bin\raqm-0.dll
             - Library\lib\raqm.lib
+  - requirements:
+      run:
+        - pkg-config
+    script:
+      - pkg-config --print-errors --exact-version "${{ version }}" raqm
 
 about:
   homepage: https://github.com/HOST-Oman/libraqm
