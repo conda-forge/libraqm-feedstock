@@ -1,7 +1,7 @@
 context:
   version: "0.10.5"
 
-package:
+recipe:
   name: libraqm
   version: ${{ version }}
 
@@ -12,50 +12,63 @@ source:
     - patches/0001-undef-NDEBUG-for-tests.patch
 
 build:
-  number: 0
-  script: build
+  number: 1
 
-requirements:
-  build:
-    - ${{ stdlib('c') }}
-    - ${{ compiler('c') }}
-    - meson
-    - ninja
-    - pkg-config
-  host:
-    - freetype
-    - fribidi
-    - harfbuzz
-    # needed for harfbuzz pkg-config metadata
-    - glib
-    - if: win
-      then:
-        # needed for freetype pkg-config metadata
-        - zlib
-    # for running tests, see
-    # https://github.com/HOST-Oman/libraqm/blob/v0.10.5/tests/meson.build#L1
-    - python *
-  run_exports:
-    - ${{ pin_subpackage("libraqm", upper_bound="x.x") }}
-  ignore_run_exports:
-    from_package:
-      - glib
-      - zlib
-      - python
+outputs:
+  - package:
+      name: libraqm
+    build:
+      script:
+        file: build
+    requirements:
+      build:
+        - ${{ stdlib('c') }}
+        - ${{ compiler('c') }}
+        - meson
+        - ninja
+        - pkg-config
+      host:
+        - freetype
+        - fribidi
+        - libharfbuzz-devel
+        # for running tests, see
+        # https://github.com/HOST-Oman/libraqm/blob/v0.10.5/tests/meson.build#L1
+        - python *
+      run_exports:
+        - ${{ pin_subpackage("libraqm", upper_bound="x.x") }}
+      ignore_run_exports:
+        from_package:
+          - python
+    tests:
+      - package_contents:
+          include:
+            - raqm.h
+          lib:
+            - if: unix
+              then: raqm
+          files:
+            # soversion breaks `lib:` pattern
+            - if: win
+              then:
+                - Library\bin\raqm-0.dll
+                - Library\lib\raqm.lib
 
-tests:
-  - package_contents:
-      include:
-        - raqm.h
-      lib:
-        - if: unix
-          then: raqm
-      files:
-        # soversion breaks `lib:` pattern
-        - if: win
-          then:
-            - Library\bin\raqm-0.dll
-            - Library\lib\raqm.lib
+  - package:
+      name: libraqm-devel
+    requirements:
+      host:
+        - ${{ pin_subpackage("libraqm", exact=True) }}
+      run:
+        - ${{ pin_subpackage("libraqm", exact=True) }}
+        - libharfbuzz-devel
+      run_exports:
+        - ${{ pin_subpackage("libraqm", upper_bound="x.x") }}
+    tests:
+      - requirements:
+          run:
+            - pkg-config
+        script:
+          - pkg-config --print-errors --exact-version "${{ version }}" raqm
 
 about:
   homepage: https://github.com/HOST-Oman/libraqm
