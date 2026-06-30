@@ -70,6 +70,7 @@ Current release info
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libraqm-green.svg)](https://anaconda.org/conda-forge/libraqm) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libraqm.svg)](https://anaconda.org/conda-forge/libraqm) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libraqm.svg)](https://anaconda.org/conda-forge/libraqm) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libraqm.svg)](https://anaconda.org/conda-forge/libraqm) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libraqm--devel-green.svg)](https://anaconda.org/conda-forge/libraqm-devel) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libraqm-devel.svg)](https://anaconda.org/conda-forge/libraqm-devel) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libraqm-devel.svg)](https://anaconda.org/conda-forge/libraqm-devel) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libraqm-devel.svg)](https://anaconda.org/conda-forge/libraqm-devel) |
 
 Installing libraqm
 ==================
@@ -81,16 +82,16 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libraqm` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `libraqm, libraqm-devel` can be installed with `conda`:
 
 ```
-conda install libraqm
+conda install libraqm libraqm-devel
 ```
 
 or with `mamba`:
 
 ```
-mamba install libraqm
+mamba install libraqm libraqm-devel
 ```
 
 It is possible to list all of the versions of `libraqm` available on your platform with `conda`:
